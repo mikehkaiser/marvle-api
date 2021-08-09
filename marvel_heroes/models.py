@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import date, datetime
 import uuid
-from flask_sqlalchemy.model import Model
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 from flask_login import UserMixin, LoginManager
@@ -46,19 +45,20 @@ class User(db.Model, UserMixin):
 class Hero(db.Model):
     id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
+    alter_ego = db.Column(db.String(150))
     description = db.Column(db.String(300))
     comics_appeared_in = db.Column(db.String(300))
     super_power = db.Column(db.String(100))
-    date_added = db.Column(db.DateTime, default= datetime.utcnow)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
     owner_token = db.Column(db.String, db.ForeignKey('user.token'))
 
-    def __init__(self, name, description, comics_appeared_in, super_power, date_added, owner_token, id=''):
+    def __init__(self, name, alter_ego, description, comics_appeared_in, super_power, owner_token, id=''):
         self.id = self.set_id()
         self.name = name
+        self.alter_ego = alter_ego
         self.description = description
         self.comics_appeared_in = comics_appeared_in
         self.super_power = super_power
-        self.date_added = date_added
         self.owner_token = owner_token
 
     def set_id(self):
@@ -66,7 +66,7 @@ class Hero(db.Model):
 
 class HeroSchema(ma.Schema):
     class Meta:
-        fields = ['id','name','description','comics_appeared_in','super_power','date_created','owner']
+        fields = ['id','name','alter_ego','description','comics_appeared_in','super_power','date_created','owner_token']
 
 hero_schema=HeroSchema()
 heroes_schema=HeroSchema(many=True)

@@ -23,20 +23,20 @@ def signup():
     return render_template('signup.html', form=form)
 
 
-@auth.route('/signin')
+@auth.route('/signin', methods = ['GET','POST'])
 def signin():
     form = UserLoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         email = form.email.data
         password = form.password.data
         print([email,password])
-        logged_user = User.query.filter(User.email == email)
+        logged_user = User.query.filter(User.email == email).first()
         if logged_user and check_password_hash(logged_user.password, password):
             login_user(logged_user)
-            flash(f'Login successful!', 'auth-success')
+            flash('You were successfully logged in.', 'auth-success')
             return redirect(url_for('site.profile'))
         else:
-            flash(f'Your credentials are lost in the quantum realm. Try again.', 'auth-failed')
+            flash('Your email/password is incorrect', 'auth-failed')
             return redirect(url_for('auth.signin'))
     return render_template('signin.html', form=form)
 

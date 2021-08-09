@@ -2,6 +2,19 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+        {% for cat, msg in messages %}
+            {% if cat == 'auth-success' %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ msg }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <header class="hero-section">
     <h3>Welcome to Heroes DB</h3>
 </header>
@@ -14,9 +27,7 @@
         <li class="list-group-item">
             Token: {{ current_user.token }}
         </li>
-        <!-- <li class="list-group-item">
-            Most recent login: {{ *find function for last reported login }}
-        </li> -->
+        
     </ul>
 </div>
     

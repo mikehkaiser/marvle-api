@@ -5,6 +5,7 @@
             <!-- actual form goes here using Jinja statement which makes the HTML -->
             <!-- use a 'post' request to add the info to a database -->
             <form method="POST">
+                {{ form.hidden_tag() }}
                 <div class="form-group">
                     <fieldset id="email-field">
                         {{ form.email.label }}
